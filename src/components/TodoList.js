@@ -6,7 +6,12 @@ import Item from "./Todo.js";
 
 const TodoList = props => {
   return (
+
     <div className="to-do-list">
+
+    <label htmlFor="search">Search by name </label>
+    <input type="text" value={props.inputValue} onChange={props.petFilterOnChange}/>
+
       {props.tasks.map(item => (
         <Item
           toggleItemCompleted={props.toggleItemCompleted}
@@ -18,7 +23,7 @@ const TodoList = props => {
         Clear Completed
       </button>
     </div>
-  );
+  )
 };
 
 export default TodoList;

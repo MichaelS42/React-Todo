@@ -27,8 +27,16 @@ class App extends React.Component {
         task: '',
         id: Date.now(),
         completed: false
-      }
+      },
+      inputValue: ''
     }
+  }
+
+  taskFilterOnChange = (event) => {
+    console.log("hi from : app.js : taskfilteronchange", event.target.value)
+    this.setState({
+      inputValue: event.target.value
+    })
   }
 
   toggleItemCompleted = itemId => {
@@ -57,7 +65,12 @@ class App extends React.Component {
     e.preventDefault();
     if (this.state.newTask.task) {
       this.setState({
-        tasks: [...this.state.tasks, this.state.newTask]
+        tasks: [...this.state.tasks, this.state.newTask],
+        newTask: {
+        task: '',
+        id: "",
+        completed: false
+        }
       })
      }
   };
@@ -71,17 +84,33 @@ class App extends React.Component {
   };
 
   render() {
+
+    const filteredTasks =
+      this.state.tasks.filter(task => {
+        return task.name.toLowerCase().includes(this.state.inputValue.toLowerCase())
+      })
+
     return (
       <div className="App">
         <div className="header">
           <h2>TO DO List</h2>
-          <TodoForm addNewItem={this.handleSubmit} newTask={this.state.newTask} handleChanges={this.handleChanges} />
+          <TodoForm 
+          addNewItem={this.handleSubmit} 
+          newTask={this.state.newTask} 
+          handleChanges={this.handleChanges} 
+          />
         </div>
         <TodoList
           toggleItemCompleted={this.toggleItemCompleted}
           tasks={this.state.tasks}
           clearCompleted={this.clearCompleted}
-        />
+
+          
+          tasks={this.sortTasks(filteredTasks)}
+      
+          taskFilterOnChange={this.taskFilterOnChange}
+          inputValue={this.state.inputValue}
+         />
       </div>
     );
   }
